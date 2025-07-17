@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody">
+    <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody" wire:poll.3000ms="loadMessages">
         <div class="tyn-reply" id="tynReply">
             @foreach ($chatMessages as $msg)
                 <div class="tyn-reply-item {{ $msg->sender_id === auth()->id() ? 'outgoing' : 'incoming' }}">
@@ -152,7 +152,7 @@
     </div>
 
     <div class="tyn-chat-form">
-        {{-- <div class="tyn-chat-form-insert">
+        <div class="tyn-chat-form-insert">
             <ul class="tyn-list-inline gap gap-3">
                 <li class="dropup">
                     <button class="btn btn-icon btn-light btn-md btn-pill" data-bs-toggle="dropdown"
@@ -207,7 +207,7 @@
                     </button>
                 </li>
             </ul>
-        </div> --}}
+        </div>
         <div class="tyn-chat-form-enter">
             <input type="text" class="form-control me-2" placeholder="Type your message..."
                 wire:model.defer="message" wire:keydown.enter="sendMessage" />
