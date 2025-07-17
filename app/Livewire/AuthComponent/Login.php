@@ -29,7 +29,7 @@ class Login extends Component
         if (Auth::guard('web')->attempt($credentials)) {
             session()->flash('message', 'You have successfully logged in!');
 
-            return $this->redirectRoute('user.dashboard', navigate: true);
+            return $this->redirectRoute('chat.list', navigate: true);
         }
 
         session()->flash('error', 'Invalid credentials!');

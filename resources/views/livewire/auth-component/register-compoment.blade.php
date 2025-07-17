@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
-    <div class="col-xl-4 col-lg-5 col-md-7 col-sm-9">
-        <div class="my-3 text-center">
+    <div class="col-xl-6 col-lg-8">
+        <div class="mb-3 text-center">
             <a class="tyn-logo tyn-logo-sm" href="index.html">
                 <svg viewBox="0 0 225 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -17,25 +17,30 @@
         </div>
         <div class="card border-0">
             <div class="p-4">
-                <h3>Login</h3>
+                <h3>Create Account</h3>
 
-                @if (session()->has('message'))
-                    <div class="alert alert-success">{{ session('message') }}</div>
-                @endif
+                <form wire:submit.prevent="register">
+                    <div class="row g-3 gx-4">
 
-                @if (session()->has('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-
-                <form wire:submit.prevent="login">
-                    <div class="row g-3">
+                        <!-- Name -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label" for="username">Your Name</label>
+                                <input type="text" id="username"
+                                    class="form-control @error('name') is-invalid @enderror" wire:model.lazy="name"
+                                    placeholder="yourname">
+                                @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
 
                         <!-- Email -->
-                        <div class="col-12">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label" for="email-address">Email Address</label>
-                                <input type="email" wire:model.lazy="email"
-                                    class="form-control @error('email') is-invalid @enderror" id="email-address"
+                                <input type="email" id="email-address"
+                                    class="form-control @error('email') is-invalid @enderror" wire:model.lazy="email"
                                     placeholder="youremail@example.com">
                                 @error('email')
                                     <small class="text-danger">{{ $message }}</small>
@@ -44,63 +49,83 @@
                         </div>
 
                         <!-- Password -->
-                        <div class="col-12">
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="form-label d-flex" for="password">
-                                    Password
-                                    {{-- <a href="{{ route('password.request') }}"
-                                        class="link link-primary ms-auto">Forgot?</a> --}}
-                                </label>
-                                <input type="password" wire:model.lazy="password"
-                                    class="form-control @error('password') is-invalid @enderror" id="password"
-                                    placeholder="password">
+                                <label class="form-label" for="password">Password</label>
+                                <input type="password" id="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    wire:model.lazy="password" placeholder="password">
                                 @error('password')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                         </div>
 
-                        <!-- Remember Me -->
+                        <!-- Confirm Password -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label" for="repeat-password">Password Repeat</label>
+                                <input type="password" id="repeat-password" class="form-control"
+                                    wire:model.lazy="password_confirmation" placeholder="password again">
+                            </div>
+                        </div>
+
+                        <!-- Terms Agreement -->
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" wire:model="remember" id="remember">
-                                <label class="form-check-label" for="remember">Remember me</label>
+                                <input class="form-check-input @error('terms') is-invalid @enderror" type="checkbox"
+                                    wire:model="terms" id="privacy-term-agree">
+                                <label class="form-check-label" for="privacy-term-agree">
+                                    I agree with <a href="#">privacy policy &amp; terms</a>
+                                </label>
+                                @error('terms')
+                                    <small class="text-danger d-block">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
 
                         <!-- Submit -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary w-100" wire:loading.attr="disabled">
-                                Account Login
+                            <button type="submit" class="btn btn-primary w-100">
+                                Create Account
                             </button>
                         </div>
-
                     </div>
                 </form>
+
+                @if (session()->has('success'))
+                    <div class="alert alert-success mt-3">
+                        {{ session('success') }}
+                    </div>
+                @endif
             </div>
 
             <div class="p-4 border-top border-light">
-                <h6 class="tyn-title-overline text-center pb-1">Or Use With</h6>
-                <ul class="d-flex gap gap-3">
-                    <li class="flex-grow-1"><button class="btn btn-light w-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-google" viewBox="0 0 16 16">
-                                <path
-                                    d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
-                            </svg><!-- google -->
-                            <span>Google</span></button></li>
-                    <li class="flex-grow-1"><button class="btn btn-light w-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-facebook" viewBox="0 0 16 16">
-                                <path
-                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
-                            </svg><!-- facebook -->
-                            <span>Facebook</span></button></li>
-                </ul>
-            </div><!-- .p-4 -->
-        </div><!-- .card -->
-        <div class="text-center mt-4">
-            <p class="small">Don't have an account? <a href="{{ route('register') }}" wire:navigate>Register</a></p>
+                <div class="row justify-content-center">
+                    <div class="col-9">
+                        <h6 class="tyn-title-overline text-center pb-1">Or Signup With</h6>
+                        <ul class="d-flex gap gap-3">
+                            <li class="flex-grow-1"><button class="btn btn-light w-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
+                                    </svg><!-- google -->
+                                    <span>Google</span></button></li>
+                            <li class="flex-grow-1"><button class="btn btn-light w-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                                        <path
+                                            d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
+                                    </svg><!-- facebook -->
+                                    <span>Facebook</span></button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div><!-- .col -->
+        <div class="text-center mt-4">
+            <p class="small">Already have an account? <a href="{{ route('login') }}" wire:navigate>Login</a></p>
+        </div>
+    </div>
 </div>
