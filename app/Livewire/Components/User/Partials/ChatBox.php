@@ -73,6 +73,7 @@ class ChatBox extends Component
         $this->reset(['message', 'attachment', 'replyToId']);
 
         // Clear contenteditable input
+        $this->loadMessages();
         $this->dispatch('clearChatInput');
     }
 
