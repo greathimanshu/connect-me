@@ -34,7 +34,6 @@ class ChatBox extends Component
     {
 
         if (!$this->selectedUser || (empty($this->message) && !$this->attachment)) {
-            dd($this->message);
             return;
         }
 
