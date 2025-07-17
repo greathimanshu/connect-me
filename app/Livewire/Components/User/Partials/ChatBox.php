@@ -17,7 +17,7 @@ class ChatBox extends Component
     public string $message = '';
     public $attachment;
     public ?int $replyToId = null;
-    public $messages = [];
+    public $chatMessages = [];
 
     protected $listeners = ['userSelected' => 'setUser'];
 
@@ -79,14 +79,14 @@ class ChatBox extends Component
     public function loadMessages()
     {
         if ($this->selectedUser) {
-            $this->messages = Chat::where(function ($query) {
+            $this->chatMessages = Chat::where(function ($query) {
                 $query->where('sender_id', Auth::id())
                     ->where('receiver_id', $this->selectedUser->id);
             })->orWhere(function ($query) {
                 $query->where('sender_id', $this->selectedUser->id)
                     ->where('receiver_id', Auth::id());
             })
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->get();
         }
     }

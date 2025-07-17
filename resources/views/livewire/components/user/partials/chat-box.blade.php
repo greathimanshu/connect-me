@@ -121,7 +121,7 @@
 
     <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody">
         <div class="tyn-reply" id="tynReply">
-            @foreach ($messages as $msg)
+            @foreach ($chatMessages as $msg)
                 <div class="tyn-reply-item {{ $msg->sender_id === auth()->id() ? 'outgoing' : 'incoming' }}">
                     @if ($msg->sender_id !== auth()->id())
                         <div class="tyn-reply-avatar">
