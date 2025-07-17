@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Participants
             $table->unsignedBigInteger('sender_id');
-            $table->unsignedBigInteger('receiver_id')->nullable(); // null = group chat or system
+            $table->unsignedBigInteger('receiver_id')->nullable(); 
 
             // Message Content
             $table->text('message')->nullable();
@@ -35,7 +35,7 @@ return new class extends Migration
 
             $table->enum('status', ['pending', 'sent', 'delivered', 'read', 'failed'])->default('sent');
 
-            
+
             $table->json('meta')->nullable();
 
             $table->timestamps();
