@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatList extends Component
 {
-    #[Layout('components.user.auth')]
+    #[Layout('components.user.app')]
     #[Title('Chat List')]
     public function render()
     {

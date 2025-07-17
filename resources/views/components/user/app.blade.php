@@ -11,18 +11,14 @@
 </head>
 
 <body>
-    <livewire:components.user.partials.sidebar />
 
-    <main class="dashboard-main">
-        <livewire:components.user.partials.header />
-
-        <div class="dashboard-main-body">
+    <body class="tyn-body">
+        <div class="tyn-root">
+            <livewire:components.user.partials.header />
             {{ $slot }}
         </div>
-        <livewire:components.user.partials.footer />
-    </main>
-    @include('components.user.partials.scripts')
-    @stack('scripts')
-</body>
+        @include('components.user.partials.scripts')
+        @stack('scripts')
+    </body>
 
 </html>
