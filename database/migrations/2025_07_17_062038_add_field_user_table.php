@@ -39,7 +39,7 @@ return new class extends Migration
             $table->timestamp('last_login_at')->nullable()->after('last_login_ip');
 
             // API Token
-            $table->rememberToken();
+            // $table->rememberToken();
             $table->text('api_token')->nullable()->after('last_login_at');
             $table->json('settings')->nullable();
             $table->softDeletes()->after('settings');
@@ -73,7 +73,7 @@ return new class extends Migration
 
             ]);
             $table->dropSoftDeletes();
-            $table->dropRememberToken();
+            // $table->dropRememberToken();
         });
     }
 };
