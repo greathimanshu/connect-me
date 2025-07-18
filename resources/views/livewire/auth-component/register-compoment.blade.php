@@ -48,6 +48,22 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label" for="username">Username</label>
+                                <input type="text" id="username"
+                                    class="form-control @error('username') is-invalid @enderror"
+                                    wire:model.debounce.500ms="username" placeholder="username">
+                                @error('username')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                                @if ($usernameMessage)
+                                    <small class="text-success">{{ $usernameMessage }}</small>
+                                @endif
+                            </div>
+                        </div>
+
+
                         <!-- Password -->
                         <div class="col-sm-6">
                             <div class="form-group">

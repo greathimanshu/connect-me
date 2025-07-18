@@ -15,15 +15,19 @@ class RegisterCompoment extends Component
     #[Title('User Authentication')]
 
     public string $name = '';
+    public string $username = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
     public bool $terms = false;
 
+    public string $usernameMessage = '';
+
     protected function rules()
     {
         return [
             'name' => ['required', 'string', 'min:3'],
+            'username' => ['required', 'string', 'min:3', 'unique:users,username'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', Password::defaults(), 'confirmed'],
             'terms' => ['accepted'],
@@ -47,12 +51,26 @@ class RegisterCompoment extends Component
         User::create([
             'name' => $this->name,
             'email' => $this->email,
+            'username' => $this->username,
             'password' => Hash::make($this->password),
         ]);
         $this->reset(['name', 'email', 'password', 'password_confirmation', 'terms']);
         flash()->success('Account created successfully.');
         return $this->redirect('/login', navigate: true);
     }
+
+    public function updatedUsername()
+    {
+        try {
+            $this->validateOnly('username', [
+                'username' => ['required', 'string', 'min:3', 'unique:users,username'],
+            ]);
+            $this->usernameMessage = 'Username is available!';
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->usernameMessage = '';
+        }
+    }
+
 
     public function render()
     {
