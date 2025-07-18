@@ -39,7 +39,9 @@ class ChatSideBar extends Component
                 });
             })
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('username', 'like', '%' . $this->search . '%');
+
             })
             ->get();
     }
