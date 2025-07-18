@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class ChatSideBar extends Component
 {
     public $users;
+    public $newUsers = [];
     public $search = '';
     public $selectedUserId = null;
     public function mount()
@@ -46,7 +47,35 @@ class ChatSideBar extends Component
             ->get();
     }
 
+    public function openNewChatModal()
+    {
+        $this->newUserLoad();
+        $this->selectedUserId = null;
+        $this->search = '';
+        $this->dispatch('show-new-chat-modal');
+    }
 
+    public function newUserLoad(){
+        $authId = Auth::id();
+
+        $this->newUsers = User::where('id', '!=', $authId)
+            // ->where(function ($query) use ($authId) {
+            //     $query->whereIn('id', function ($q) use ($authId) {
+            //         $q->select('receiver_id')
+            //             ->from('chats')
+            //             ->where('sender_id', $authId);
+            //     })->orWhereIn('id', function ($q) use ($authId) {
+            //         $q->select('sender_id')
+            //             ->from('chats')
+            //             ->where('receiver_id', $authId);
+            //     });
+            // })
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('username', 'like', '%' . $this->search . '%');
+            })
+            ->get();   
+    }
     public function selectUser($userId)
     {
         $this->selectedUserId = $userId;

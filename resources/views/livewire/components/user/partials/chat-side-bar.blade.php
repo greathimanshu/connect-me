@@ -6,14 +6,16 @@
         <div class="tyn-aside-head-tools">
             <ul class="link-group gap gx-3">
                 <li class="dropdown">
-                    <button class="link" data-bs-toggle="modal" data-bs-target="#newChat">
+                    <!-- Blade (Livewire Component or Blade view) -->
+                    <button wire:click="openNewChatModal" class="link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-plus" viewBox="0 0 16 16">
                             <path
                                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                        </svg><!-- plus -->
+                        </svg>
                         <span>New</span>
                     </button>
+
                 </li>
                 <li class="dropdown">
                     <button class="link dropdown-toggle" data-bs-toggle="dropdown" data-bs-offset="0,10">
@@ -102,7 +104,7 @@
                         </svg>
                     </div>
                     <input type="text" class="form-control form-control-solid" id="search"
-                        placeholder="Search contact / chat"  wire:model.debounce.300ms="search">
+                        placeholder="Search contact / chat" wire:model.debounce.300ms="search">
                 </div>
             </div>
         </div>
@@ -110,14 +112,15 @@
             <div class="tab-pane show active" id="all-chats" tabindex="0" role="tabpanel">
                 <ul class="tyn-aside-list">
                     @forelse ($users as $user)
-                        <li class="tyn-aside-item js-toggle-main {{ $selectedUserId === $user->id ? 'active' : '' }}"  wire:click="selectUser({{ $user->id }})" style="cursor: pointer;" wire:navigate >
+                        <li class="tyn-aside-item js-toggle-main {{ $selectedUserId === $user->id ? 'active' : '' }}"
+                            wire:click="selectUser({{ $user->id }})" style="cursor: pointer;" wire:navigate>
                             <div class="tyn-media-group">
                                 <div class="tyn-media tyn-size-lg">
                                     <img src="images/avatar/1.jpg" alt="">
                                 </div>
                                 <div class="tyn-media-col">
                                     <div class="tyn-media-row">
-                                        <h6 class="name">{{$user->name}}</h6>
+                                        <h6 class="name">{{ $user->name }}</h6>
                                         {{-- <span class="typing">typing ...</span> --}}
                                     </div>
                                     <div class="tyn-media-row has-dot-sap">
@@ -133,4 +136,97 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="newChat" tabindex="-1" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0">
+                <div class="modal-body p-4">
+                    <h4 class="pb-2">Search by Name</h4>
+                    <div class="form-group">
+                        <div class="form-control-wrap">
+                            <div class="form-control-icon start">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                </svg>
+                            </div>
+                            <input type="text" class="form-control form-control-solid" id="search-contact"
+                                placeholder="Search contact" wire:model.debounce.300ms="search">
+                        </div>
+                    </div>
+                    <ul class="tyn-media-list gap gap-3 pt-4">
+                        @forelse ($newUsers as $user)
+                            <li>
+                                <div class="tyn-media-group">
+                                    <div class="tyn-media">
+                                        <img src="images/avatar/5.jpg" alt="">
+                                    </div>
+                                    <div class="tyn-media-col">
+                                        <div class="tyn-media-row">
+                                            <h6 class="name">{{ $user->name }}</h6>
+                                        </div>
+                                        <div class="tyn-media-row">
+                                            <p class="content">@ {{ $user->username }}</p>
+                                        </div>
+                                    </div>
+                                    <ul class="tyn-media-option-list me-n1">
+                                        <li class="dropdown">
+                                            <button class="btn btn-icon btn-white btn-pill dropdown-toggle"
+                                                data-bs-toggle="dropdown" data-bs-offset="0,0"
+                                                data-bs-auto-close="outside">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+                                                </svg>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <ul class="tyn-list-links">
+                                                    <li>
+                                                        <button data-bs-dismiss="modal">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="currentColor"
+                                                                class="bi bi-chat-left-text" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                                <path
+                                                                    d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                                            </svg>
+                                                            <span>Start Texting</span>
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @empty
+                            <li class="text-center text-muted">No users found</li>
+                        @endforelse
+
+                    </ul>
+                </div>
+                <button class="btn btn-md btn-icon btn-pill btn-white shadow position-absolute top-0 end-0 mt-n3 me-n3"
+                    data-bs-dismiss="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path
+                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+
+@push('scripts')
+    <script>
+        window.addEventListener('show-new-chat-modal', () => {
+            const modal = new bootstrap.Modal(document.getElementById('newChat'));
+            modal.show();
+        });
+    </script>
+@endpush

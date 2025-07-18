@@ -12,13 +12,14 @@ class ChatList extends Component
 {
 
     public $selectedUser = null;
-
+    public $newUsers = [];
     protected $listeners = ['userSelected'];
 
     public function userSelected($userId)
     {
         $this->selectedUser = User::find($userId);
     }
+
     #[Layout('components.user.app')]
     #[Title('Chat List')]
     public function render()
