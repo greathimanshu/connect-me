@@ -454,10 +454,10 @@
                                 </a>
                             </li>
 
-                        </ul><!-- .tyn-list-links -->
-                    </div><!-- .dropdown-menu -->
-                </li><!-- .tyn-appbar-item -->
-            </ul><!-- .tyn-appbar-nav -->
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
