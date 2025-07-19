@@ -119,8 +119,8 @@
         </div>
     </div>
 
-    {{-- <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody" wire:poll.3000ms="loadMessages"> --}}
-    <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody" >
+    <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody" wire:poll.3000ms="loadMessages">
+    {{-- <div class="tyn-chat-body js-scroll-to-end" id="tynChatBody" > --}}
         <div class="tyn-reply" id="tynReply">
             @foreach ($chatMessages as $msg)
                 <div class="tyn-reply-item {{ $msg->sender_id === auth()->id() ? 'outgoing' : 'incoming' }}">
