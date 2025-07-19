@@ -70,17 +70,12 @@ class User extends Authenticatable
 
     public function latestMessage()
     {
-        $authId = Auth::id();
 
-        return Chat::where(function ($query) use ($authId) {
-            $query->where('sender_id', $authId)
-                ->where('receiver_id', $this->id);
-        })
-            ->orWhere(function ($query) use ($authId) {
-                $query->where('sender_id', $this->id)
-                    ->where('receiver_id', $authId);
+        return $this->hasOne(Chat::class, 'sender_id')
+            ->where(function ($query) {
+                $query->where('receiver_id', Auth::id())
+                    ->orWhere('sender_id', Auth::id());
             })
-            ->latest('created_at')
-            ->first();
+            ->latest('created_at');
     }
 }
