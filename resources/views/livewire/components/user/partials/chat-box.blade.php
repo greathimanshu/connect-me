@@ -127,7 +127,7 @@
                     @if ($msg->sender_id !== auth()->id())
                         <div class="tyn-reply-avatar">
                             <div class="tyn-media tyn-size-md tyn-circle">
-                                <img src="images/avatar/1.jpg"
+                                <img src="https://ui-avatars.com/api/?name={{ $msg->sender->name }}&background=random"
                                     alt="">
                             </div>
                         </div>

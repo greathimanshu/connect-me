@@ -161,7 +161,7 @@
                             <li>
                                 <div class="tyn-media-group">
                                     <div class="tyn-media">
-                                        <img src="images/avatar/5.jpg" alt="">
+                                        <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=random" alt="">
                                     </div>
                                     <div class="tyn-media-col">
                                         <div class="tyn-media-row">
