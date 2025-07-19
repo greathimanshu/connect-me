@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -63,5 +64,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // app/Models/User.php
+
+    public function latestMessage()
+    {
+        $authId = Auth::id();
+
+        return Chat::where(function ($query) use ($authId) {
+            $query->where('sender_id', $authId)
+                ->where('receiver_id', $this->id);
+        })
+            ->orWhere(function ($query) use ($authId) {
+                $query->where('sender_id', $this->id)
+                    ->where('receiver_id', $authId);
+            })
+            ->latest('created_at')
+            ->first();
     }
 }

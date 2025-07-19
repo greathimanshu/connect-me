@@ -116,7 +116,8 @@
                             wire:click="selectUser({{ $user->id }})" style="cursor: pointer;" wire:navigate>
                             <div class="tyn-media-group">
                                 <div class="tyn-media tyn-size-lg">
-                                    <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=random" alt="">
+                                    <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=random"
+                                        alt="">
                                 </div>
                                 <div class="tyn-media-col">
                                     <div class="tyn-media-row">
@@ -124,8 +125,25 @@
                                         {{-- <span class="typing">typing ...</span> --}}
                                     </div>
                                     <div class="tyn-media-row has-dot-sap">
-                                        <p class="content">Had they visited Rome before</p>
-                                        <span class="meta">45 min</span>
+                                        @php
+                                            $lastMessage = $user->latestMessage();
+                                        @endphp
+
+                                        <p class="content">
+                                            @if ($lastMessage)
+                                                @if ($lastMessage->sender_id === auth()->id())
+                                                    <span class="text-primary">You: </span>{{ $lastMessage->message }}
+                                                @else
+                                                    {{ $lastMessage->message }}
+                                                @endif
+                                            @else
+                                                No messages yet
+                                            @endif
+                                        </p>
+
+                                        <span class="meta">
+                                            {{ $lastMessage?->created_at?->diffForHumans() }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +179,8 @@
                             <li>
                                 <div class="tyn-media-group">
                                     <div class="tyn-media">
-                                        <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=random" alt="">
+                                        <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=random"
+                                            alt="">
                                     </div>
                                     <div class="tyn-media-col">
                                         <div class="tyn-media-row">
