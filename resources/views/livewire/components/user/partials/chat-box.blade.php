@@ -14,14 +14,15 @@
         </ul>
         <div class="tyn-media-group">
             <div class="tyn-media tyn-size-lg d-none d-sm-inline-flex">
-                <img src="images/avatar/1.jpg" alt="">
+                <img src="https://ui-avatars.com/api/?name={{ $selectedUser->name }}&background=random" alt="">
             </div>
             <div class="tyn-media tyn-size-rg d-sm-none">
-                <img src="images/avatar/1.jpg" alt="">
+                <img src="https://ui-avatars.com/api/?name={{ $selectedUser->name }}&background=random" alt="">
             </div>
             <div class="tyn-media-col">
                 <div class="tyn-media-row">
-                    <h6 class="name">{{ $selectedUser->name }} <span class="d-none d-sm-inline-block">Thompson</span>
+                    <h6 class="name">{{ $selectedUser->name }}
+                        {{-- <span class="d-none d-sm-inline-block">Thompson</span> --}}
                     </h6>
                 </div>
                 <div class="tyn-media-row has-dot-sap">
