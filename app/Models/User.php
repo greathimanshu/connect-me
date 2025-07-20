@@ -78,4 +78,11 @@ class User extends Authenticatable
             })
             ->latest('created_at');
     }
+
+    public function unreadMessages()
+    {
+        return $this->hasMany(Chat::class, 'sender_id')
+            ->where('receiver_id', Auth::id())
+            ->where('is_read', false);
+    }
 }

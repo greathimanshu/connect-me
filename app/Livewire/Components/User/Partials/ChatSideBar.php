@@ -82,6 +82,7 @@ class ChatSideBar extends Component
     public function selectUser($userId)
     {
         $this->selectedUserId = $userId;
+        $this->dispatch('hide-new-chat-modal');
         $this->dispatch('userSelected', $userId);
     }
 
