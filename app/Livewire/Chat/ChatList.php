@@ -108,8 +108,7 @@ class ChatList extends Component
         }
 
         $sentMessage = $this->saveMessage();
-        // $this->chatMessages[] = $sentMessage;
-        $this->loadMessages();
+        $this->chatMessages = $this->chatMessages->prepend($sentMessage);
         broadcast(new MessageSentEvent($sentMessage));
         $this->reset(['message', 'attachment', 'replyToId']);
 
@@ -152,6 +151,8 @@ class ChatList extends Component
     {
         $this->selectedUser = User::find($userId);
         $this->loadMessages();
+        $this->dispatch('scrollToBottom');
+
     }
 
     #[Layout('components.user.app')]

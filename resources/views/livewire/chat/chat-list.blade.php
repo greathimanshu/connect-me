@@ -378,6 +378,7 @@
                             </div>
                         </div>
                     @endforeach
+                    <div id="scroll-bottom"></div>
                 </div>
             </div>
 
@@ -483,6 +484,15 @@
                 const input = document.getElementById('tynChatInput');
                 if (input) input.innerText = '';
                 window.livewireMessageContent = '';
+            });
+            Livewire.on('scrollToBottom', () => {
+                const el = document.getElementById('scroll-bottom');
+                if (el) {
+                    el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
     </script>
