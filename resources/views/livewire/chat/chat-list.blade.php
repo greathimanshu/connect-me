@@ -123,7 +123,7 @@
                                     <div class="tyn-media-col">
                                         <div class="tyn-media-row">
                                             <h6 class="name">{{ $user->name }}</h6>
-                                            {{-- <span class="typing">typing ...</span> --}}
+                                            <span class="typing" id="typing-{{ $user->id }}"></span>
                                         </div>
                                         <div class="tyn-media-row has-dot-sap">
                                             <p class="content">
@@ -484,13 +484,20 @@
             window.Echo.private(`chat-channel.{{ $senderId }}`)
                 .listen('UserTyping', (e) => {
                     const typingIndicator = document.getElementById('typing-indicator');
+                    const typingIndicatorChatList = document.getElementById(`typing-${e.senderId}`);
                     if (typingIndicator) {
                         typingIndicator.placeholder = 'Typing...';
+                    }
+                    if(typingIndicatorChatList){
+                        typingIndicatorChatList.innerText = 'typing...';
                     }
                     clearTimeout(typingTimeout);
                     typingTimeout =  setTimeout(() => {
                         if (typingIndicator) {
                             typingIndicator.placeholder = 'Type your message...';
+                        }
+                        if (typingIndicatorChatList) {
+                             typingIndicatorChatList.innerText = '';
                         }
                     }, 2000);
 
