@@ -3,6 +3,7 @@
 namespace App\Livewire\Chat;
 
 use App\Events\MessageSentEvent;
+use App\Events\UserTyping;
 use App\Models\Chat;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,8 +26,9 @@ class ChatList extends Component
     public $attachment;
     public string $message = '';
     public $search = '';
-    public $selectedUserId = null;
+    public $receiverId = null;
     public $senderId = null;
+
     public function mount()
     {
         $this->senderId = Auth::id();
@@ -38,6 +40,12 @@ class ChatList extends Component
         $this->loadUsers();
     }
 
+    /**
+     * Load users for the chat sidebar.
+     *
+     * This method retrieves users who are not the authenticated user and have had previous chats with them.
+     * It also loads the latest message for each user if available.
+     */
     public function loadUsers()
     {
         $authId = Auth::id();
@@ -91,22 +99,6 @@ class ChatList extends Component
             'attachment' => 'nullable|file|max:10240', // 10MB
         ]);
 
-        $type = 'text';
-        $attachmentPath = null;
-
-        if ($this->attachment) {
-            $attachmentPath = $this->attachment->store('attachments', 'public');
-
-            $mime = $this->attachment->getMimeType();
-            if (str_contains($mime, 'image')) {
-                $type = 'image';
-            } elseif (str_contains($mime, 'video')) {
-                $type = 'video';
-            } else {
-                $type = 'file';
-            }
-        }
-
         $sentMessage = $this->saveMessage();
         $this->chatMessages = $this->chatMessages->prepend($sentMessage);
         broadcast(new MessageSentEvent($sentMessage));
@@ -115,7 +107,6 @@ class ChatList extends Component
         $this->dispatch('clearChatInput');
     }
 
-    // #[On('echo-private:chat-channel.{senderId}', 'MessageSentEvent')]
     public function getListeners()
     {
         return [
@@ -127,7 +118,6 @@ class ChatList extends Component
     {
         $chat = Chat::with('sender:id,name', 'receiver:id,name')
             ->find($event['message']['id']);
-
         if ($chat) {
             $this->chatMessages = $this->chatMessages->prepend($chat);
         }
@@ -139,7 +129,6 @@ class ChatList extends Component
             'sender_id'     => Auth::id(),
             'receiver_id'   => $this->selectedUser->id,
             'message'       => $this->message,
-            // 'attachment'    => $attachmentPath,
             'message_type'  => 'text',
             'reply_to_id'   => $this->replyToId,
             'status'        => 'sent',
@@ -149,10 +138,15 @@ class ChatList extends Component
     }
     public function selectUser($userId)
     {
+        $this->receiverId = $userId;
         $this->selectedUser = User::find($userId);
         $this->loadMessages();
         $this->dispatch('scrollToBottom');
 
+    }
+
+    public function userTyping(){
+        broadcast(new UserTyping($this->senderId, $this->receiverId ))->toOthers();
     }
 
     #[Layout('components.user.app')]

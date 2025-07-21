@@ -113,7 +113,7 @@
                 <div class="tab-pane show active" id="all-chats" tabindex="0" role="tabpanel">
                     <ul class="tyn-aside-list">
                         @forelse ($users as $user)
-                            <li class="tyn-aside-item js-toggle-main {{ $selectedUserId === $user->id ? 'active' : '' }}"
+                            <li class="tyn-aside-item js-toggle-main {{ $receiverId === $user->id ? 'active' : '' }}"
                                 wire:click="selectUser({{ $user->id }})" style="cursor: pointer;" wire:navigate>
                                 <div class="tyn-media-group">
                                     <div class="tyn-media tyn-size-lg">
@@ -440,8 +440,9 @@
                     </ul>
                 </div>
                 <div class="tyn-chat-form-enter">
-                    <input type="text" class="form-control me-2" placeholder="Type your message..."
-                        wire:model.defer="message" wire:keydown.enter="sendMessage" />
+                    <input type="text" class="form-control me-2" id="typing-indicator"
+                        placeholder="Type your message..." wire:model.defer="message"
+                        wire:keydown.enter="sendMessage" wire:keydown="userTyping" />
                     <ul class="tyn-list-inline me-n2 my-1">
                         <li>
                             <button class="btn btn-icon btn-white btn-md btn-pill">
@@ -477,9 +478,23 @@
 
 </div>
 @push('scripts')
-    <script>
+    <script type="module">
         document.addEventListener('DOMContentLoaded', () => {
+            let typingTimeout = null
+            window.Echo.private(`chat-channel.{{ $senderId }}`)
+                .listen('UserTyping', (e) => {
+                    const typingIndicator = document.getElementById('typing-indicator');
+                    if (typingIndicator) {
+                        typingIndicator.placeholder = 'Typing...';
+                    }
+                    clearTimeout(typingTimeout);
+                    typingTimeout =  setTimeout(() => {
+                        if (typingIndicator) {
+                            typingIndicator.placeholder = 'Type your message...';
+                        }
+                    }, 2000);
 
+                });
             Livewire.on('clearChatInput', () => {
                 const input = document.getElementById('tynChatInput');
                 if (input) input.innerText = '';
