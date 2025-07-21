@@ -10,6 +10,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 
 class ChatList extends Component
@@ -25,9 +26,10 @@ class ChatList extends Component
     public string $message = '';
     public $search = '';
     public $selectedUserId = null;
-    public $senderId = 1;
+    public $senderId = null;
     public function mount()
     {
+        $this->senderId = Auth::id();
         $this->loadUsers();
     }
 
@@ -106,18 +108,32 @@ class ChatList extends Component
         }
 
         $sentMessage = $this->saveMessage();
-        $this->chatMessages[] = $sentMessage;
+        // $this->chatMessages[] = $sentMessage;
+        $this->loadMessages();
         broadcast(new MessageSentEvent($sentMessage));
         $this->reset(['message', 'attachment', 'replyToId']);
 
         $this->dispatch('clearChatInput');
     }
 
-    #[On('echo-private:chat-channel.{senderId}', 'MessageSentEvent')]
+    // #[On('echo-private:chat-channel.{senderId}', 'MessageSentEvent')]
+    public function getListeners()
+    {
+        return [
+            "echo-private:chat-channel.{$this->senderId},MessageSentEvent" => 'listenMessage',
+        ];
+    }
+
     public function listenMessage($event)
     {
-        dd($event);
+        $chat = Chat::with('sender:id,name', 'receiver:id,name')
+            ->find($event['message']['id']);
+
+        if ($chat) {
+            $this->chatMessages = $this->chatMessages->prepend($chat);
+        }
     }
+
     public function saveMessage()
     {
         return Chat::create([
@@ -134,7 +150,6 @@ class ChatList extends Component
     }
     public function selectUser($userId)
     {
-        $this->senderId = Auth::id();
         $this->selectedUser = User::find($userId);
         $this->loadMessages();
     }

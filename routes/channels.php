@@ -7,6 +7,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 
-Broadcast::channel('chat-channel.{receiver_id}', function ($user, $receiver_id) {
-    return (int) $user->id === (int) $receiver_id;
+Broadcast::channel('chat-channel.{senderId}', function ($user, $senderId) {
+    // Auth logic: user can only listen to their own channel
+    return (int) $user->id === (int) $senderId;
 });
